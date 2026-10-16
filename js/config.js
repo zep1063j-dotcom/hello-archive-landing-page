@@ -13,5 +13,5 @@
      API 키, 비밀번호 같은 비밀 정보는 절대 넣지 마세요.
    ========================================================= */
 window.HELLO_ARCHIVE_CONFIG = {
-  signupFormUrl: ''
+  signupFormUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSfm1CVv12xJ4mTz89-kZ90A2qpOcFT0_ZCpVli9CzmstN9INQ/viewform'
 };
