@@ -261,8 +261,8 @@ p:last-child { margin-bottom: 0; }
 .hero-title {
   font-family: var(--ha-font-serif);
   font-weight: 700;
-  font-size: clamp(2.05rem, 7.4vw, 3.6rem);
-  line-height: 1.28;
+  font-size: clamp(2.4rem, 9vw, 4.25rem);
+  line-height: 1.22;
   letter-spacing: -0.015em;
   margin-bottom: 24px;
 }
@@ -903,6 +903,149 @@ p:last-child { margin-bottom: 0; }
 }
 .principle__title { font-size: 1.125rem; font-weight: 700; margin-bottom: 10px; }
 .principle p { color: var(--ha-muted); font-size: 1rem; }
+
+/* ---------- 12-1. Coming Next (앞으로 더해질 기능) ----------
+   빈 동그라미 = 아직 도달하지 않은 단계 (타임라인의 빈 점과 같은 의미) */
+.soon-list {
+  display: grid;
+  gap: 0;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  border-top: 1px solid var(--ha-ink);
+}
+.soon {
+  position: relative;
+  padding: 22px 0 22px 30px;
+  border-bottom: 1px dashed var(--ha-line);
+}
+.soon:last-child { border-bottom: 1px solid var(--ha-ink); }
+.soon::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 30px;
+  width: 13px;
+  height: 13px;
+  border: 2px solid var(--ha-red);
+  border-radius: 50%;
+}
+.soon__title {
+  font-family: var(--ha-font-serif);
+  font-weight: 700;
+  font-size: clamp(1.1875rem, 2.2vw, 1.375rem);
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+.soon__text { color: var(--ha-muted); font-size: 1rem; margin: 0; }
+/* '준비 중' / '검토 중' 표시: 아직 제공하지 않는 기능임을 분명히 */
+.soon__tag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 9px;
+  border: 1px solid var(--ha-red);
+  border-radius: 999px;
+  color: var(--ha-red);
+  font-family: var(--ha-font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.6;
+  vertical-align: 0.2em;
+  white-space: nowrap;
+}
+
+/* 함께 기록하기: 질문 하나에 가족의 기억이 이어지는 모습 */
+.together {
+  height: 100%;
+  padding: clamp(24px, 4vw, 36px);
+  border-radius: var(--ha-radius-paper);
+  background: var(--ha-card);
+  box-shadow: var(--ha-shadow-paper);
+}
+.together__title {
+  font-family: var(--ha-font-serif);
+  font-weight: 700;
+  font-size: clamp(1.375rem, 2.6vw, 1.625rem);
+  margin-bottom: 8px;
+}
+.together__text { color: var(--ha-muted); margin-bottom: 24px; }
+
+.thread { margin: 0; }
+.thread__body {
+  padding: 20px;
+  border-radius: var(--ha-radius-ui);
+  background: var(--ha-paper);
+}
+.thread__q {
+  font-family: var(--ha-font-serif);
+  font-weight: 700;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+.thread__q span {
+  display: block;
+  font-family: var(--ha-font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ha-red);
+  margin-bottom: 2px;
+}
+.thread__post {
+  position: relative;
+  padding: 12px 14px;
+  border-radius: var(--ha-radius-paper);
+  background: var(--ha-card);
+  border: 1px solid var(--ha-line);
+}
+.thread__who {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 4px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+.thread__who::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--ha-clay);
+}
+.thread__post--child .thread__who::before { background: var(--ha-red); }
+.thread__post--dad .thread__who::before { background: var(--ha-black); }
+.thread__text {
+  margin: 0;
+  font-family: var(--ha-font-serif);
+  font-size: 0.9875rem;
+  line-height: 1.7;
+}
+/* 덧붙인 기억: 원래 답변 아래로 들여 쓰고, 왼쪽 선으로 이어짐 */
+.thread__post--reply {
+  margin: 10px 0 0 22px;
+}
+.thread__post--reply::before {
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: -10px;
+  bottom: 50%;
+  width: 12px;
+  border-left: 1.5px solid var(--ha-line);
+  border-bottom: 1.5px solid var(--ha-line);
+  border-bottom-left-radius: 8px;
+}
+.thread__add {
+  margin: 12px 0 0 22px;
+  padding: 10px 14px;
+  border: 1.5px dashed var(--ha-line);
+  border-radius: var(--ha-radius-ui);
+  color: var(--ha-muted);
+  font-size: 0.9375rem;
+  text-align: center;
+}
+.thread .sample-note { margin-top: 12px; }
 
 /* ---------- 13. FAQ (Bootstrap 아코디언 변수만 조정) ---------- */
 .faq {
