@@ -10,10 +10,10 @@ landing page/
 ├── css/
 │   └── landing.css   # 디자인 토큰(CSS 변수), 스타일, 애니메이션
 ├── assets/
-│   └── favicon.svg   # 브라우저 탭 아이콘 (로고 마크)
+│   ├── favicon.svg   # 브라우저 탭 아이콘 (로고 마크)
+│   └── og-image.png  # 링크 공유 시 보이는 미리보기 이미지 (1200×630)
 ├── js/
-│   ├── config.js     # 사이트 설정값 (사전 신청 폼 주소)
-│   └── landing.js    # 모바일 메뉴, 스크롤 등장 효과, 타임라인 진행, 신청 버튼 연결
+│   └── landing.js    # 모바일 메뉴, 스크롤 등장 효과, 타임라인 진행, 신청 버튼 클릭 기록
 └── README.md
 ```
 
@@ -45,7 +45,7 @@ landing page/
 | 1 | 전체 페이지 골격 | 완료 |
 | 2 | UI/UX 스타일링 | 완료 (Phase 3에서 브랜드색 검정·빨강 반영) |
 | 3 | 스크롤 인터랙션 | 완료 |
-| 4 | 전환 기능(사전 신청 연결) | 연결 구조 완료 — 신청 폼 주소 입력 대기 |
+| 4 | 전환 기능(사전 신청 연결) | 완료 — Google 폼 연결, 중간 신청 버튼 2곳 추가 |
 | 5 | 최종 점검 | 완료 (배포는 직접 진행) |
 
 ## 디자인 시스템 (css/landing.css 상단 `:root`)
@@ -78,26 +78,21 @@ landing page/
 
 ## 사전 신청 폼 연결하기
 
-이 페이지는 자체 서버나 데이터베이스 없이, **외부 신청 폼(예: Google 폼)** 으로 연결합니다.
+이 페이지는 자체 서버나 데이터베이스 없이, **외부 신청 폼(Google 폼)** 으로 연결합니다.
 
 ### 1. Google 폼 만들기
 1. [forms.google.com](https://forms.google.com)에서 새 양식을 만듭니다. 제목 예: `Hello_Archive 출시 소식 받기`
 2. 설정 → 응답 → **이메일 주소 수집**: `응답자 입력`으로 설정합니다. (이름, 전화번호, 부모님 정보는 받지 않습니다)
 3. 질문을 하나 추가합니다: 유형 `체크박스`, 필수, 항목 `위 내용에 동의합니다` — 아래 고지 문구를 이 질문의 설명란에 넣습니다.
-4. 오른쪽 위 **보내기 → 링크(🔗) → URL 단축** 을 눌러 주소(`https://forms.gle/...`)를 복사합니다.
+4. 오른쪽 위 **보내기 → 링크(🔗)** 에서 주소를 복사합니다.
 
 ### 2. 페이지에 연결하기
-`js/config.js`를 열어 따옴표 안에 주소를 붙여 넣고 저장합니다.
+`index.html`에서 마지막 영역(`<section class="cta">`)의 "출시 소식 받기" 링크 `href` 한 곳만 바꾸면 됩니다.
+헤더·첫 화면·중간의 신청 버튼은 모두 이 마지막 영역으로 이동하므로 따로 바꿀 곳이 없습니다.
 
-```js
-window.HELLO_ARCHIVE_CONFIG = {
-  signupFormUrl: 'https://forms.gle/여기에-복사한-주소'
-};
-```
-
-- 저장하면 마지막 영역의 "출시 소식 받기" 버튼이 신청 폼(새 창) 링크로 바뀝니다.
-- 비워 두면 "준비 중" 상태로 돌아갑니다. `https://`로 시작하지 않는 주소는 무시됩니다.
-- 이 파일은 공개 파일이므로 비밀번호나 API 키를 넣지 않습니다.
+### 신청 버튼 클릭 수 보기 (선택)
+각 신청 버튼에는 위치를 나타내는 `data-cta`(header / hero / mid-preview / mid-privacy / final)가 붙어 있습니다.
+Google Analytics(gtag)나 Plausible 스크립트를 `index.html`의 `<head>`에 추가하면 `signup_click` 이벤트가 자동으로 전송됩니다. 스크립트가 없으면 아무 일도 일어나지 않습니다.
 
 ### 3. 개인정보 수집·이용 동의 문구 (예시 — 운영 상황에 맞게 수정)
 
@@ -110,7 +105,7 @@ window.HELLO_ARCHIVE_CONFIG = {
 
 ※ 위 문구는 작성 예시이며 법률 검토를 거친 문서가 아닙니다. 정식 출시 전에는 개인정보 처리방침을 별도로 마련하는 것을 권장합니다.
 
-## 최종 점검 결과 (2026-10-15)
+## 최종 점검 결과 (2026-10-15 측정, 이후 수정분은 미반영)
 
 측정 환경: 클라우드 테스트 환경의 로컬 서버(압축·캐시 없음) + Lighthouse 12.8 기본 모바일/데스크톱 설정.
 실제 배포 서버에서는 수치가 달라질 수 있으니, 배포 후 [PageSpeed Insights](https://pagespeed.web.dev/)로 다시 측정하는 것을 권장합니다.
@@ -130,15 +125,16 @@ window.HELLO_ARCHIVE_CONFIG = {
 
 ## 배포 전 체크리스트
 
-- [ ] `js/config.js`에 사전 신청 폼 주소 입력 (비워 두면 "준비 중"으로 표시)
+- [x] 사전 신청 Google 폼 연결
+- [x] 링크 공유 미리보기(`og:image`, `og:url`, `canonical`, `twitter:card`) 추가 — 주소는 GitHub Pages 기본 주소(`https://zep1063j-dotcom.github.io/hello-archive-landing-page/`)로 가정한 값입니다. **실제 배포 주소가 다르면 `<head>`의 4곳(canonical, og:url, og:image, twitter:image)을 바꿔 주세요.**
+- [ ] 배포 후 [카카오 공유 디버거](https://developers.kakao.com/tool/debugger/sharing)와 [Facebook 공유 디버거](https://developers.facebook.com/tools/debug/)로 미리보기 확인 (이미 공유한 적 있는 주소는 캐시를 새로 고쳐야 새 이미지가 보입니다)
+- [ ] 배포 후 PageSpeed Insights로 성능 재측정
 - [ ] 신청을 받기 시작하기 전: 문의 이메일, 개인정보 처리방침(또는 폼 안의 수집·이용 고지) 준비
 - [ ] 브랜드 검정·빨강 색상 코드 확정 → `css/landing.css` 맨 위 `--ha-black`, `--ha-red`, `--ha-red-deep`
-- [ ] 배포 주소가 정해지면 `<head>`에 `canonical`, `og:url`, `og:image`(공유 이미지 1200×630) 추가
 - [ ] GitHub Pages는 저장소의 최상위 폴더 또는 `/docs` 폴더만 배포할 수 있습니다. 이 폴더(`landing page`)가 저장소 안의 하위 폴더라면 위치를 확인하세요. 폴더 이름에 공백이 있으면 주소에 `%20`이 들어갑니다.
 
 ## 아직 확정되지 않은 것 (임의로 채우지 않음)
 
 - 브랜드 검정·빨강의 정확한 색상 코드 → 현재 임시값
-- 사전 신청 폼 주소 → `js/config.js`에 입력 전까지 최종 CTA 버튼은 비활성 + "준비 중" 안내
 - 문의 이메일, 개인정보 처리방침, 운영자 정보 → 확정 후 Footer에 추가
-- 배포 URL, 공유 이미지 → 확정 후 `canonical`, `og:url`, `og:image` 추가
+- 실제 배포 URL → 현재는 GitHub Pages 기본 주소로 가정

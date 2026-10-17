@@ -5,7 +5,7 @@
    3) 메뉴: 지금 보고 있는 섹션의 메뉴 항목 표시
    4) 스크롤 등장 효과: 질문·단계·이야기 카드·타임라인이 순서대로 나타남
    5) 기록 성장 타임라인: 스크롤에 따라 1주 → 1년 단계가 차례로 채워짐
-   6) 사전 신청: js/config.js에 신청 폼 주소가 있으면 신청 버튼을 링크로 전환
+   6) 신청 버튼 클릭 기록: 분석 도구가 있을 때만 어느 위치의 버튼이 눌렸는지 전송
 
    원칙
    - JavaScript가 꺼져 있거나 오류가 나도 모든 콘텐츠는 그대로 보입니다.
@@ -201,47 +201,23 @@
     });
   }
 
-  /* ---------- 6. 사전 신청 연결 (Phase 4) ----------
-     js/config.js의 signupFormUrl에 https 주소가 있을 때만 신청 버튼을 켭니다.
-     주소가 없거나 올바르지 않으면 HTML 그대로 '준비 중' 상태를 유지합니다. */
-  function getSignupUrl() {
-    var config = window.HELLO_ARCHIVE_CONFIG || {};
-    var raw = typeof config.signupFormUrl === 'string' ? config.signupFormUrl.trim() : '';
-    if (!raw) return null;
-    try {
-      var url = new URL(raw);
-      if (url.protocol !== 'https:') throw new Error('https 주소가 아닙니다');
-      return url.href;
-    } catch (error) {
-      if (window.console) console.warn('[Hello_Archive] signupFormUrl을 확인해 주세요:', error.message);
-      return null;
-    }
-  }
-
-  function initSignup() {
-    var button = document.querySelector('[data-signup-button]');
-    var status = document.getElementById('cta-status');
-    var url = getSignupUrl();
-    if (!button || !url) return;
-
-    var link = document.createElement('a');
-    link.className = 'btn btn-paper btn-lg';
-    link.href = url;
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    link.setAttribute('data-signup-link', '');
-    link.setAttribute('aria-describedby', 'cta-status');
-    link.innerHTML = '출시 소식 받기<span class="visually-hidden"> (신청 페이지가 새 창에서 열림)</span>';
-    button.replaceWith(link);
-
-    if (status) {
-      status.textContent = '신청 페이지가 새 창으로 열립니다. 수집 항목과 이용 목적은 신청 페이지에서 확인하실 수 있어요.';
-    }
-    root.classList.add('signup-ready');
+  /* ---------- 6. 신청 버튼 클릭 기록 ----------
+     버튼마다 붙은 data-cta(header, hero, mid-preview, mid-privacy, final)를 방문 분석 도구로 보냅니다.
+     분석 도구(Google Analytics, Plausible 등) 스크립트를 <head>에 추가하기 전에는 아무 일도 하지 않습니다. */
+  function initCtaTracking() {
+    document.addEventListener('click', function (event) {
+      var button = event.target.closest('[data-cta]');
+      if (!button) return;
+      var place = button.getAttribute('data-cta');
+      try {
+        if (typeof window.gtag === 'function') window.gtag('event', 'signup_click', { cta_place: place });
+        if (typeof window.plausible === 'function') window.plausible('signup_click', { props: { place: place } });
+      } catch (error) { /* 분석 도구 오류가 페이지 동작을 막지 않도록 무시 */ }
+    });
   }
 
   function init() {
-    initSignup();
+    initCtaTracking();
     initMobileMenu();
     initHeaderShadow();
     initCurrentNav();

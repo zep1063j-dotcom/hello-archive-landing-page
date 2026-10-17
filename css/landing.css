@@ -135,20 +135,6 @@ p:last-child { margin-bottom: 0; }
   --bs-btn-hover-color: var(--ha-black);
   --bs-btn-hover-bg: #fff;
   --bs-btn-hover-border-color: #fff;
-  /* 신청 경로 준비 전: 눌리지 않는 상태임을 분명히 보여줌 */
-  --bs-btn-disabled-color: var(--ha-paper);
-  --bs-btn-disabled-bg: rgba(248, 245, 239, 0.12);
-  --bs-btn-disabled-border-color: rgba(248, 245, 239, 0.55);
-  --bs-btn-disabled-opacity: 1;
-}
-.btn-paper:disabled { border-style: dashed; gap: 10px; }
-.btn__badge {
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: var(--ha-paper);
-  color: var(--ha-black);
-  font-size: 0.75rem;
-  font-weight: 700;
 }
 .btn-outline-paper {
   --bs-btn-color: var(--ha-paper);
@@ -718,7 +704,7 @@ p:last-child { margin-bottom: 0; }
 }
 .timeline__badge {
   font-family: var(--ha-font-sans);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 700;
   padding: 3px 10px;
   border-radius: 999px;
@@ -947,7 +933,7 @@ p:last-child { margin-bottom: 0; }
   border-radius: 999px;
   color: var(--ha-red);
   font-family: var(--ha-font-sans);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   line-height: 1.6;
   vertical-align: 0.2em;
@@ -1102,6 +1088,23 @@ p:last-child { margin-bottom: 0; }
   margin-top: 20px;
   font-size: 0.9375rem;
   color: #D8D2CB;
+}
+
+/* ---------- 14-1. 중간 신청 유도 ---------- */
+.mid-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: clamp(40px, 6vw, 64px);
+  padding-top: clamp(32px, 5vw, 48px);
+  border-top: 1px solid var(--ha-line);
+  text-align: center;
+}
+.mid-cta__text {
+  font-family: var(--ha-font-serif);
+  font-size: 1.25rem;
+  line-height: 1.5;
 }
 
 /* ---------- 15. Footer ---------- */
